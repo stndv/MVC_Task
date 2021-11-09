@@ -1,22 +1,14 @@
 <?php
+include('connect.php');
+
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
     $u_name = filter_var($_GET["user_name"], FILTER_SANITIZE_STRING); 
     $u_email = filter_var($_GET["user_email"], FILTER_SANITIZE_EMAIL); 
     $u_task = filter_var($_GET["user_task"], FILTER_SANITIZE_STRING);
     
-    //connection parameters
-    $db_host = "localhost";
-    $db_user = "root";
-    $db_passw = "";
-    $db_base = "api_db";
-    $db_table = "mytable";
-    
-    try {
-        // Подключение к базе данных
-        $db = new PDO("mysql:host=$db_host;dbname=$db_base", $db_user, $db_passw);
-        // Устанавливаем корректную кодировку
-        $db->exec("set names utf8");
+       
+       try {
         // Собираем данные для запроса
         $data = array( 'name' => $u_name, 'email' => $u_email, 'task' => $u_task ); 
         
@@ -40,5 +32,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     	echo "Успех. Информация занесена в базу данных";
     }
 }
+
+//pagination
+$numberpage = 3;
+//find out how many total records
+//find out how many pagination links based on total/numberpage
+$countsql = $db->prepare("SELECT COUNT(id) from mytable");
+
     
 ?>
