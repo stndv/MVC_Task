@@ -12,7 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         // Собираем данные для запроса
         $data = array( 'name' => $u_name, 'email' => $u_email, 'task' => $u_task ); 
         
-        //Check whether fields are not empty
+        //Check whether GET HEADER fields are not empty
         if(empty($u_name)){die("Enter your name M...F...");}
         if(empty($u_email) || !filter_var($u_email, FILTER_VALIDATE_EMAIL)){die("Enter Email");}
         if(empty($u_task)){die("Enter your Task");}    
@@ -21,7 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         $query = $db->prepare("INSERT INTO $db_table (name, email, task) values (:name, :email, :task)");
         // Выполняем запрос с данными
         $query->execute($data);
-        // Запишим в переменую, что запрос отрабтал
+        // Запишем в переменую, что запрос отрабтал
         $result = true;
     } catch (PDOException $e) {
         // Если есть ошибка соединения или выполнения запроса, выводим её
@@ -32,12 +32,5 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     	echo "Успех. Информация занесена в базу данных";
     }
 }
-
-//pagination
-$numberpage = 3;
-//find out how many total records
-//find out how many pagination links based on total/numberpage
-$countsql = $db->prepare("SELECT COUNT(id) from mytable");
-
     
 ?>
