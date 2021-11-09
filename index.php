@@ -16,8 +16,25 @@
 	<hr>
 
 	<?php
+	//pagination
+	$numperpage = 3;
+	//find out how many total records
+	//find out how many pagination links based on total/numberpage
+	$countsql = $db->prepare("SELECT COUNT(id) from mytable");
+	$countsql->execute();
+	$row = $countsql->fetch();
+	$numrecords = $row[0];
+	$numlinks = ceil($numrecords/$numperpage);
+	//var_dump(ceil($numrecords));
+	//var_dump(ceil($numlinks));
+
+	//create a page
+	$page = $_GET['start'];
+	if(!$page) $page=0;
+	$start = $page * $numperpage; 
+
 	//Show all current records!
-	$sql = $db->prepare("SELECT name, email, task from mytable");
+	$sql = $db->prepare("SELECT name, email, task from mytable LIMIT $start, $numperpage");
 	$sql->execute();
 	while($row = $sql->fetch()){
 		$name = $row[0];
@@ -29,18 +46,10 @@
 		echo "<hr>";
 	}
 
-	//pagination
-	$numberpage = 3;
-	//find out how many total records
-	//find out how many pagination links based on total/numberpage
-	$countsql = $db->prepare("SELECT COUNT(id) from mytable");
-	$countsql->execute();
-	$row = $countsql->fetch();
-	$numrecords = $row[0];
-	$numlinks = ceil($numrecords/$numberpage);
-	//var_dump(ceil($numrecords));
-	var_dump(ceil($numlinks));
-
-	//display 
+	//navigation through pages (using QUERY_STRING)
+	for($i=0; $i < $numlinks; $i++){
+		$y=$i + 1;
+		echo '<a href="index.php?start='.$i.'">'.$y.' </a>';
+	}
 	?>
 </body>

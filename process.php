@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>    
+<body>
+    
+<a href="index.php">Back to main page</a>
 <?php
 include('connect.php');
 
@@ -34,3 +42,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 }
     
 ?>
+
+</body>
+</html>
