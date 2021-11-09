@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>MVC Task</title>
+	<STYLE>A {text-decoration: none;} </STYLE>
 	<?php include_once('connect.php');?>
 </head>
 <body>
@@ -49,7 +50,7 @@
 	//navigation through pages (using QUERY_STRING)
 	for($i=0; $i < $numlinks; $i++){
 		$y=$i + 1;
-		echo '<a href="index.php?start='.$i.'">'.$y.' </a>';
+		echo '<b><a href="index.php?start='.$i.'">'.$y.' </a>';
 	}
 	?>
 </body>
