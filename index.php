@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>MVC Task</title>
-	<STYLE>A {text-decoration: none;} </STYLE>
+	<style>
+</style>
 	<?php include_once('connect.php');?>
 </head>
 <body>
@@ -14,13 +15,13 @@
 	</form>	
 
 	<p>Пагинация МФ</p>
-	<hr>
-
-	<?php
-	//pagination
+	<?php	
+	//-----------------------------
+	try {
+		//pagination
 	$numperpage = 3;
 	//find out how many total records
-	//find out how many pagination links based on total/numberpage
+	//find out how many pagination links based on total/numperpage
 	$countsql = $db->prepare("SELECT COUNT(id) from mytable");
 	$countsql->execute();
 	$row = $countsql->fetch();
@@ -30,14 +31,24 @@
 	//var_dump(ceil($numlinks));
 
 	//create a page
-	$page = $_GET['start'];
-	if(!$page) $page=0;
+	$page = (isset($_GET['start']))?$_GET['start']:0;
+	
 	$start = $page * $numperpage; 
-
-	//Show all current records!
-	$sql = $db->prepare("SELECT name, email, task from mytable LIMIT $start, $numperpage");
-	$sql->execute();
-	while($row = $sql->fetch()){
+	
+	$sortname = (isset($_GET['sort']))?$_GET['sort']:0;
+	//$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+	
+	if($sortname == 'sname') {
+		$stmt = $db->prepare("SELECT name,email,task FROM mytable ORDER BY name ");
+	}
+	else if($sortname == 'semail') {
+		$stmt = $db->prepare("SELECT name, email, task FROM mytable ORDER BY email");
+	}
+	else{
+		$stmt = $db->prepare("SELECT name, email, task from mytable LIMIT $start, $numperpage");
+	}
+	$stmt->execute();
+	while($row = $stmt->fetch()){
 		$name = $row[0];
 		$email = $row[1];
 		$task = $row[2];
@@ -46,11 +57,19 @@
 		echo "$task <br>";
 		echo "<hr>";
 	}
-
-	//navigation through pages (using QUERY_STRING)
+		
+	} catch(PDOException $e) {
+		echo "Error: " . $e->getMessage();
+	}
+	  
+	//navigation through pages (using QUERY_STRING) pagination
 	for($i=0; $i < $numlinks; $i++){
 		$y=$i + 1;
 		echo '<b><a href="index.php?start='.$i.'">'.$y.' </a>';
 	}
-	?>
+
+	  $db = null;
+?>
+	<a href="?sort=sname">Name:</a>
+    <a href="?sort=semail">Email:</a>
 </body>
