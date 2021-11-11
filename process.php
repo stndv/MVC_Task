@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     $u_task = filter_var($_GET["user_task"], FILTER_SANITIZE_STRING);
     
        
-       try {
+    try {
         // Собираем данные для запроса
         $data = array( 'name' => $u_name, 'email' => $u_email, 'task' => $u_task ); 
         

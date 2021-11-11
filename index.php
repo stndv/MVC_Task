@@ -2,8 +2,6 @@
 <html>
 <head>
 	<title>MVC Task</title>
-	<style>
-</style>
 	<?php include_once('connect.php');?>
 </head>
 <body>
@@ -34,28 +32,25 @@
 	$page = (isset($_GET['start']))?$_GET['start']:0;
 	
 	$start = $page * $numperpage; 
-	
+	// сортировка через $_GET и выбор как отображать данные
 	$sortname = (isset($_GET['sort']))?$_GET['sort']:0;
 	//$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-	
-	if($sortname == 'sname') {
+	if($sortname == 'name') {
 		$stmt = $db->prepare("SELECT name,email,task FROM mytable ORDER BY name ");
 	}
-	else if($sortname == 'semail') {
+	else if($sortname == 'email') {
 		$stmt = $db->prepare("SELECT name, email, task FROM mytable ORDER BY email");
 	}
 	else{
 		$stmt = $db->prepare("SELECT name, email, task from mytable LIMIT $start, $numperpage");
 	}
+	//Print current results
 	$stmt->execute();
 	while($row = $stmt->fetch()){
 		$name = $row[0];
 		$email = $row[1];
 		$task = $row[2];
-		echo "$name <br>";
-		echo "$email <br>";
-		echo "$task <br>";
-		echo "<hr>";
+		echo "$name <br> $email <br> $task <br> <hr>";
 	}
 		
 	} catch(PDOException $e) {
@@ -70,6 +65,10 @@
 
 	  $db = null;
 ?>
-	<a href="?sort=sname">Name:</a>
-    <a href="?sort=semail">Email:</a>
+	<div>
+		<p> Sort by:
+			<a href="?sort=name">Name:</a> or by 
+			<a href="?sort=email">Email:</a>
+		</p>
+	</div>	
 </body>
