@@ -25,8 +25,6 @@
 	$row = $countsql->fetch();
 	$numrecords = $row[0];
 	$numlinks = ceil($numrecords/$numperpage);
-	//var_dump(ceil($numrecords));
-	//var_dump(ceil($numlinks));
 
 	//create a page
 	$page = (isset($_GET['start']))?$_GET['start']:0;
@@ -36,22 +34,35 @@
 	$sortname = (isset($_GET['sort']))?$_GET['sort']:0;
 	//$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 	if($sortname == 'name') {
-		$stmt = $db->prepare("SELECT name,email,task FROM mytable ORDER BY name ");
+		$stmt = $db->prepare("SELECT id, name,email,task, idDone FROM mytable ORDER BY name ");
 	}
 	else if($sortname == 'email') {
-		$stmt = $db->prepare("SELECT name, email, task FROM mytable ORDER BY email");
+		$stmt = $db->prepare("SELECT id, name, email, task, idDone FROM mytable ORDER BY email");
 	}
 	else{
-		$stmt = $db->prepare("SELECT name, email, task from mytable LIMIT $start, $numperpage");
+		$stmt = $db->prepare("SELECT id, name, email, task, idDone from mytable LIMIT $start, $numperpage");
 	}
 	//Print current results
+	echo "<table border=1><tr>
+                <th>Name</th>
+                <th>Email: </th>
+                <th>Task</th>
+				<th>Status</th>
+				<th>Toggle</th></tr>";
+	
 	$stmt->execute();
-	while($row = $stmt->fetch()){
-		$name = $row[0];
-		$email = $row[1];
-		$task = $row[2];
-		echo "$name <br> $email <br> $task <br> <hr>";
+		while($info = $stmt->fetch()){
+		//var_dump($info);die;
+		$name = $info['name'];
+		$email = $info['email'];
+		$task = $info['task'];
+		$status = ($info['idDone']=="1")?"Completed":"NotCompleted";
+		$toggle = ($info['idDone']=="1")
+                ?"<a href=deactivate.php?id=".$info['id'].">Deactivate</a>"
+                :"<a href=activate.php?id=".$info['id'].">Activate</a>";
+		echo "<tr> <td>$name</td> <td>$email</td> <td>$task</td> <td>$status</td> <td>$toggle</td>";
 	}
+	echo "</tr> </table>";
 		
 	} catch(PDOException $e) {
 		echo "Error: " . $e->getMessage();

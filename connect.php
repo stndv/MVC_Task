@@ -18,7 +18,7 @@ try {
     die();
 }
 //--------------------
-class TableRows extends RecursiveIteratorIterator {
+/*class TableRows extends RecursiveIteratorIterator {
     function __construct($it) {
       parent::__construct($it, self::LEAVES_ONLY);
     }
@@ -35,6 +35,6 @@ class TableRows extends RecursiveIteratorIterator {
       echo "</tr>" . "\n";
     }
   }
-
+*/
 ?>
 

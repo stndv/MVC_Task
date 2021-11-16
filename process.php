@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-
-</head>    
+<head></head>    
 <body>
     
 <a href="index.php">Back to main page</a>
@@ -42,6 +40,5 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 }
     
 ?>
-
 </body>
 </html>
